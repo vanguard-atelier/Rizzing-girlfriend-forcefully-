@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Important Question 💀</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #0f1015;
+      color: #f3f4f6;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      overflow: hidden;
+    }
+    .card {
+      background: #181920;
+      border: 1px solid #2d2f39;
+      border-radius: 24px;
+      padding: 3rem 2rem;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      width: min(90vw, 420px);
+      position: relative;
+      z-index: 10;
+    }
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 2rem;
+      font-weight: 700;
+    }
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1.5rem;
+      min-height: 60px;
+      position: relative;
+    }
+    button {
+      padding: 12px 28px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: transform 0.15s ease, background-color 0.2s ease;
+    }
+    #yesBtn {
+      background: #ff4d6d;
+      color: white;
+      box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4);
+    }
+    /* The desperate blinking state */
+    .desperate {
+      animation: pulseBlink 0.6s infinite alternate ease-in-out !important;
+      background: #ff2a55 !important;
+      transform: scale(1.15) !important;
+    }
+    @keyframes pulseBlink {
+      0% {
+        box-shadow: 0 0 10px rgba(255, 42, 85, 0.5);
+        opacity: 0.85;
+      }
+      100% {
+        box-shadow: 0 0 35px rgba(255, 42, 85, 1);
+        opacity: 1;
+        transform: scale(1.22);
+      }
+    }
+    #noBtn {
+      background: #2b2d38;
+      color: #9ca3af;
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    /* Hidden celebration screen */
+    .hidden {
+      display: none !important;
+    }
+    #successCard {
+      animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes popIn {
+      from { transform: scale(0.7); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .heart-fall {
+      position: fixed;
+      top: -10vh;
+      font-size: 1.8rem;
+      animation: fall linear forwards;
+      pointer-events: none;
+    }
+    @keyframes fall {
+      to {
+        transform: translateY(115vh) rotate(360deg);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- The Main Question Card -->
+  <div class="card" id="questionCard">
+    <h1>Do you love me? 🥺</h1>
+    <div class="btn-group">
+      <button id="yesBtn">Yes</button>
+      <button id="noBtn">No</button>
+    </div>
+  </div>
+
+  <!-- The "You too" Success Card -->
+  <div class="card hidden" id="successCard">
+    <h1>You too! ❤️✨</h1>
+    <p style="color: #9ca3af; font-size: 1.1rem; line-height: 1.6;">
+      Knew you couldn't resist anyway hehe 💀😭
+    </p>
+  </div>
+
+  <script>
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const questionCard = document.getElementById("questionCard");
+    const successCard = document.getElementById("successCard");
+
+    let dodges = 0;
+
+    function dodgeNoButton(e) {
+      if (e) e.preventDefault();
+      dodges++;
+
+      // Once she hovers or tries to tap No, make Yes beg for its life
+      yesBtn.classList.add("desperate");
+      yesBtn.innerText = "click me plss 🥺🙏🏻";
+
+      // Make "No" absolute so it breaks out of the flex container
+      noBtn.style.position = "fixed";
+
+      const padding = 60;
+      const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+      const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+
+      const randomX = Math.max(padding, Math.random() * maxX);
+      const randomY = Math.max(padding, Math.random() * maxY);
+
+      noBtn.style.left = `${randomX}px`;
+      noBtn.style.top = `${randomY}px`;
+
+      if (dodges === 3) noBtn.innerText = "Bruh stop 😭";
+      if (dodges === 6) noBtn.innerText = "Can't touch this 💀";
+      if (dodges > 8) noBtn.innerText = "Just pick Yes 💀";
+    }
+
+    // Handles mouse hover + mobile tap attempts
+    noBtn.addEventListener("mouseenter", dodgeNoButton);
+    noBtn.addEventListener("touchstart", dodgeNoButton);
+    noBtn.addEventListener("click", dodgeNoButton);
+
+    // On clicking YES
+    yesBtn.addEventListener("click", () => {
+      questionCard.classList.add("hidden");
+      noBtn.style.display = "none";
+      successCard.classList.remove("hidden");
+
+      // Spawn falling hearts
+      for (let i = 0; i < 30; i++) {
+        setTimeout(createHeart, i * 90);
+      }
+    });
+
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.classList.add("heart-fall");
+      heart.innerText = ["❤️", "💖", "✨", "💀"][Math.floor(Math.random() * 4)];
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = Math.random() * 2 + 2.5 + "s";
+      document.body.appendChild(heart);
+
+      setTimeout(() => heart.remove(), 4500);
+    }
+  </script>
+</body>
+</html>
